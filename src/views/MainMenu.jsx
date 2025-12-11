@@ -1,4 +1,19 @@
+import { Link } from "react-router-dom"
 import styled from "styled-components"
+
+const Wrapper = styled.div`
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: #fff;
+`
+
+const Center = styled.div`
+  text-align: center;
+  max-width: 480px;
+`
 
 const IconRow = styled.div`
   display: inline-flex;
@@ -15,6 +30,7 @@ const MiniSquare = styled.div`
   align-items: center;
   justify-content: center;
   font-weight: 700;
+  font-size: 22px;
 `
 
 const Title = styled.h1`
@@ -45,10 +61,7 @@ const Button = styled.button`
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 `
 
-export default function MainMenu ({
-  onPlay = () => {},
-  onPlaybook = () => {}
-}) {
+export default function MainMenu({ onPlay = () => {}, onPlaybook = () => {} }) {
   return (
     <Wrapper>
       <Center>
@@ -57,11 +70,11 @@ export default function MainMenu ({
           <MiniSquare>X</MiniSquare>
           <MiniSquare>O</MiniSquare>
         </IconRow>
+
         <Title>Tic Tac Toe</Title>
+
         <Buttons>
-          <Button primary onClick={onPlay}>
-            Play
-          </Button>
+          <Link to="" primary onClick={onPlay}>Play</Link>
           <Button onClick={onPlaybook}>Playbook</Button>
         </Buttons>
       </Center>

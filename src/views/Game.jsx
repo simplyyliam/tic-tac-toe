@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import styled from 'styled-components'
+import { HowToPlayModal } from "../components"
 
 const Page = styled.div`
   min-height: 100vh;
