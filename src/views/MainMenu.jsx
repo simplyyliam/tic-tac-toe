@@ -74,7 +74,7 @@ export default function MainMenu({ onPlay = () => {}, onPlaybook = () => {} }) {
         <Title>Tic Tac Toe</Title>
 
         <Buttons>
-          <Link to="" primary onClick={onPlay}>Play</Link>
+          <Link to="/play" primary onClick={onPlay}>Play</Link>
           <Button onClick={onPlaybook}>Playbook</Button>
         </Buttons>
       </Center>

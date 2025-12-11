@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import useGameLogic from "../hooks/useGameLogic";
 
 const GameContext = createContext();
@@ -9,11 +9,7 @@ export function GameProvider({ children }) {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [currentPlayer, setCurrentPlayer] = useState("X");
   const [winner, setWinner] = useState(null);
-
-  const [scores, setScores] = useState({
-    X: 0,
-    O: 0
-  });
+  const [scores, setScores] = useState({ X: 0, O: 0 });
 
   function makeMove(index) {
     if (board[index] || winner) return;
@@ -26,10 +22,7 @@ export function GameProvider({ children }) {
 
     if (result) {
       setWinner(result);
-      setScores(prev => ({
-        ...prev,
-        [result]: prev[result] + 1
-      }));
+      setScores(prev => ({ ...prev, [result]: prev[result] + 1 }));
       return;
     }
 
@@ -48,19 +41,10 @@ export function GameProvider({ children }) {
   }
 
   return (
-    <GameContext.Provider
-      value={{
-        board,
-        currentPlayer,
-        winner,
-        scores,
-        makeMove,
-        resetGame
-      }}
-    >
+    <GameContext.Provider value={{ board, currentPlayer, winner, scores, makeMove, resetGame }}>
       {children}
     </GameContext.Provider>
   );
 }
 
-
+export default GameContext;

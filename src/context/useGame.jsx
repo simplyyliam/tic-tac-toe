@@ -1,6 +1,10 @@
 import { useContext } from "react";
-import GameContext from "./GameContext"
+import GameContext from "./GameContext";
 
-export  function useGame() {
-  return useContext(GameContext);
+export function useGame() {
+  const context = useContext(GameContext);
+  if (!context) {
+    throw new Error("useGame must be used inside a GameProvider");
+  }
+  return context;
 }

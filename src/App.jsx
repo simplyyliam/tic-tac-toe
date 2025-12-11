@@ -1,14 +1,18 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { MainMenu } from "./views"
-function App () {
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { MainMenu, GamePage } from "./views";
+import { GameProvider } from "./context/GameContext";
 
+function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<MainMenu/>}/>
-      </Routes>
-    </BrowserRouter>
-  )
+    <GameProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MainMenu />} />
+          <Route path="/play" element={<GamePage />} />
+        </Routes>
+      </BrowserRouter>
+    </GameProvider>
+  );
 }
 
-export default App
+export default App;
