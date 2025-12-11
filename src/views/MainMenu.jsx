@@ -45,7 +45,7 @@ const Button = styled.button`
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 `
 
-export default function LandingPage ({
+export default function MainMenu ({
   onPlay = () => {},
   onPlaybook = () => {}
 }) {
