@@ -1,59 +1,137 @@
-
 import styled from 'styled-components'
+import { ArrowLeft } from 'lucide-react'
 
+/* Overlay */
 const Overlay = styled.div`
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 40;
+  transition: opacity 0.2s ease;
+`
+
+/* Modal wrapper */
+const ModalWrapper = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 50;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1200;
+  padding: 1rem;
 `
 
-const Card = styled.div`
-  width: min(780px, 92%);
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 22px;
-  padding: 36px;
-  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
-  color: #fff;
-  line-height: 1.6;
+/* Modal card */
+const ModalCard = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 32rem;
+  background: #18181b; /* zinc-900 */
+  border: 1px solid #27272a; /* zinc-800 */
+  border-radius: 1rem;
+  padding: 1.5rem;
+
+  @media (min-width: 768px) {
+    padding: 2rem;
+  }
 `
 
-const Close = styled.button`
+/* Back button */
+const BackButton = styled.button`
   position: absolute;
-  left: 24px;
-  top: 18px;
-  background: rgba(255, 255, 255, 0.06);
-  border: none;
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background: #27272a; /* zinc-800 */
+  transition: background-color 0.2s ease;
   cursor: pointer;
+
+  &:hover {
+    background: #3f3f46; /* zinc-700 */
+  }
 `
 
-export default function HowToPlayModal ({ open, onClose }) {
-  if (!open) return null
+/* Content */
+const Content = styled.div`
+  margin-top: 2rem;
+  text-align: center;
+`
+
+/* Text */
+const Paragraph = styled.p`
+  color: white;
+  font-size: 1.125rem;
+  line-height: 1.75;
+  font-weight: 300;
+
+  @media (min-width: 768px) {
+    font-size: 1.25rem;
+  }
+
+  & + & {
+    margin-top: 1rem;
+  }
+`
+
+const Emphasis = styled.span`
+  font-weight: 500;
+`
+
+const PurpleX = styled.span`
+  color: #c084fc; /* purple-400 */
+  font-weight: 600;
+`
+
+const PurpleO = styled.span`
+  color: #d8b4fe; /* purple-300 */
+  font-weight: 600;
+`
+
+const GoalText = styled(Paragraph)`
+  margin-top: 1.5rem;
+  font-weight: 400;
+`
+
+export default function HowToPlayModal () {
   return (
-    <Overlay>
-      <Card>
-        <Close onClick={onClose} aria-label='Close'>
-          ←
-        </Close>
-        <div style={{ paddingTop: 8, textAlign: 'center', fontSize: 20 }}>
-          <p style={{ fontSize: 20 }}>
-            Tic-Tac-Toe is a quick two-player game played on a 3×3 grid. One
-            player is X, and the other is O. Players take turns placing their
-            mark in an empty square.
-          </p>
-          <p style={{ marginTop: 12 }}>
-            The goal is simple: Be the first to get three of your marks in a row
-            — horizontally, vertically, or diagonally. If all nine squares are
-            filled and no one has three in a row, the game ends in a draw.
-          </p>
-        </div>
-      </Card>
-    </Overlay>
+    <>
+      <Overlay />
+
+      <ModalWrapper>
+        <ModalCard>
+          <BackButton>
+            <ArrowLeft size={16} color='white' />
+          </BackButton>
+
+          <Content>
+            <Paragraph>
+              <Emphasis>Tic-Tac-Toe</Emphasis> is a quick two-player game played
+              on a 3×3 grid. One player is <PurpleX>X</PurpleX>, and the other
+              is <PurpleO>O</PurpleO>.
+            </Paragraph>
+
+            <Paragraph>
+              Players take turns placing their mark in an empty square.
+            </Paragraph>
+
+            <GoalText>
+              <Emphasis>The goal is simple:</Emphasis>
+            </GoalText>
+
+            <Paragraph>
+              Be the first to get three of your marks in a row — horizontally,
+              vertically, or diagonally.
+            </Paragraph>
+
+            <Paragraph>
+              If all nine squares are filled and no one has three in a row, the
+              game ends in a draw.
+            </Paragraph>
+          </Content>
+        </ModalCard>
+      </ModalWrapper>
+    </>
   )
 }
