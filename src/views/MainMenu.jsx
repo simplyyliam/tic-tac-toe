@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { HowToPlayModal, Logo } from '../components'
+import { useModal } from '../hooks'
 
 /* Layout */
 const Page = styled.div`
@@ -79,6 +80,7 @@ const PlaybookButton = styled(BaseButton)`
 `
 
 export default function Home () {
+  const howToPlayModal = useModal()
   return (
     <Page>
       <Content>
@@ -89,14 +91,14 @@ export default function Home () {
           <Link to='Game'>
             <PlayButton>Play</PlayButton>
           </Link>
-          <PlaybookButton onClick={HowToPlayModal.open}>
+          <PlaybookButton onClick={howToPlayModal.open}>
             Playbook
           </PlaybookButton>
         </ButtonStack>
       </Content>
       <HowToPlayModal
-        isOpen={HowToPlayModal.isOpen}
-        onClose={HowToPlayModal.close}
+        isOpen={howToPlayModal.isOpen}
+        onClose={howToPlayModal.close}
         soundEnabled={true}
       />
     </Page>
