@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Settings, X, Volume2, VolumeX } from 'lucide-react';
-import { useGame } from '../../context';
-import { useSound } from '../../hooks/useSound';
+import { useGame, useSound } from '../../hooks';
 
 
 const Overlay = styled.div`

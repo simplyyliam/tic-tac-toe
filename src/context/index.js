@@ -1,3 +1,2 @@
-export { GameProvider } from "./GameContext";
+export { default as GameProvider } from "./GameContext";
 
-export { useGame } from "./useGame";

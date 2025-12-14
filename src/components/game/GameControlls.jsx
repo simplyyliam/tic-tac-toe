@@ -1,9 +1,7 @@
-import { useGame } from '../../context'
-import { useSound } from '../../hooks/useSound'
-
 import { Pause, Play, Clock } from 'lucide-react'
 
 import styled from 'styled-components'
+import { useGame, useSound } from '../../hooks'
 
 const Controls = styled.div`
   display: flex;

@@ -2,8 +2,7 @@
 import styled from 'styled-components';
 import { Trophy, Handshake, RotateCcw, Home } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useGame } from '../../context';
-import { useSound } from '../../hooks/useSound';
+import { useGame, useSound } from '../../hooks';
 
 
 

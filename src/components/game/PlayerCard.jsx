@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import { useGame } from '../../context'
+import { useGame } from '../../hooks'
+
 
 const Card = styled.div`
   display: flex;

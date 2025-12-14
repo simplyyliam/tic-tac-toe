@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 
-export function useSound(soundEnable = true) {
+export default function useSound(soundEnable = true) {
   const audioContextRef = useRef(null);
   const getAudioContext = useCallback(() => {
     if (!audioContextRef.current) {

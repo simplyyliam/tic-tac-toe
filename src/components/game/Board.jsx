@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { useGame } from '../../context'
-import { useSound } from '../../hooks/useSound'
+import { useGame, useSound } from '../../hooks'
+
 
 const MarkSvg = styled.svg`
   width: 3rem;

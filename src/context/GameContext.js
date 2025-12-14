@@ -18,7 +18,7 @@ const WINING_COMBOS = [
   [2, 4, 6]
 ]
 
-export function GameProvider ({ children }) {
+export default function GameProvider ({ children }) {
   const [board, setBoard] = useState(Array(9).fill(null))
   const [currentPlayer, setCurrentPlayer] = useState('X')
   const [winner, setWinner] = useState(null)
