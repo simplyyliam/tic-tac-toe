@@ -1,6 +1,5 @@
-import React, {
+import {
   createContext,
-  useContext,
   useState,
   useCallback,
   useEffect
@@ -116,7 +115,7 @@ export function GameProvider ({ children }) {
   }, [])
 
   const handleGameStart = useCallback(() => {
-    setIsPaused(prev => !prev)
+    setGameStarted(prev => !prev)
   }, [])
 
     const handleGamePause = useCallback(() => {
