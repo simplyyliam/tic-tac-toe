@@ -1,50 +1,168 @@
-import { createContext, useContext, useState } from "react";
-import useGameLogic from "../hooks/useGameLogic";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect
+} from 'react'
 
-const GameContext = createContext();
+const GameContext = createContext()
 
-export function GameProvider({ children }) {
-  const { checkWinner } = useGameLogic();
+const WINING_COMBOS = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6]
+]
 
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [currentPlayer, setCurrentPlayer] = useState("X");
-  const [winner, setWinner] = useState(null);
-  const [scores, setScores] = useState({ X: 0, O: 0 });
+export function GameProvider ({ children }) {
+  const [board, setBoard] = useState(Array(9).fill(null))
+  const [currentPlayer, setCurrentPlayer] = useState('X')
+  const [winner, setWinner] = useState(null)
+  const [isDraw, setIsDraw] = useState(false)
+  const [winningLine, setWinningLine] = useState([])
+  const [gameStarted, setGameStarted] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
+  const [timer, setTimer] = useState(0)
+  const [theme, setTheme] = useState('dark')
+  const [soundEnabled, setSoundEnabled] = useState(true)
 
-  function makeMove(index) {
-    if (board[index] || winner) return;
+  const [players, setPlayers] = useState({
+    X: {
+      name: 'Player 1',
+      avatar:
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2w=100&h=100&fit=crop',
+      wins: 0,
+      losses: 0
+    },
+    O: {
+      name: 'Player 2',
+      avatar:
+        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+      wins: 0,
+      losses: 0
+    }
+  })
 
-    const newBoard = [...board];
-    newBoard[index] = currentPlayer;
-    setBoard(newBoard);
-
-    const result = checkWinner(newBoard);
-
-    if (result) {
-      setWinner(result);
-      setScores(prev => ({ ...prev, [result]: prev[result] + 1 }));
-      return;
+  useEffect(() => {
+    let interval
+    if (gameStarted && !isPaused && !winner && !isDraw) {
+      interval = setInterval(() => {
+        setTimer(prev => prev + 1)
+      }, 1000)
     }
 
-    if (!newBoard.includes(null)) {
-      setWinner("draw");
-      return;
+    return () => clearInterval(interval)
+  }, [gameStarted, isDraw, isPaused, winner])
+
+  const handleCheckWinner = useCallback(squares => {
+    for (let combo of WINING_COMBOS) {
+      const [a, b, c] = combo
+      if (
+        squares[a] &&
+        squares[a] === squares[b] &&
+        squares[a] === squares[c]
+      ) {
+        return { winner: squares[a], line: combo }
+      }
     }
+    return null
+  }, [])
 
-    setCurrentPlayer(prev => (prev === "X" ? "O" : "X"));
-  }
+  const handleMakeMove = useCallback(
+    i => {
+      if (board[i] || winner || isDraw || isPaused) return false
+      const newBoard = [...board]
+      newBoard[i] = currentPlayer
+      setBoard(newBoard)
 
-  function resetGame() {
-    setBoard(Array(9).fill(null));
-    setWinner(null);
-    setCurrentPlayer("X");
+      const result = handleCheckWinner(newBoard)
+      if (result) {
+        setWinner(result.winner)
+        setWinningLine(result.line)
+        setPlayers(prev => ({
+          ...prev,
+          [result.winner]: {
+            ...prev[result.winner],
+            wins: prev[result.winner].wins + 1
+          },
+          ...prev[result.winner === 'X' ? 'O' : 'X'],
+          losses: prev[result.winner === 'X' ? 'O' : 'X'].losses + 1
+        }))
+        return 'win'
+      } else if (newBoard.every(cell => cell !== null)) {
+        setIsDraw(true)
+        return 'draw'
+      }
+
+      setCurrentPlayer(prev => (prev === 'X' ? 'O' : 'X'))
+      return 'move'
+    },
+    [board, currentPlayer, winner, isDraw, isPaused, handleCheckWinner]
+  )
+
+  const handleGameReset = useCallback(() => {
+    setBoard(Array(9).fill(null))
+    setCurrentPlayer('X')
+    setWinner(null)
+    setIsDraw(false)
+    setWinningLine([])
+    setTimer(0)
+    setIsPaused(false)
+  }, [])
+
+  const handleGameStart = useCallback(() => {
+    setIsPaused(prev => !prev)
+  }, [])
+
+    const handleGamePause = useCallback(() => {
+    setIsPaused(prev => !prev);
+  }, []);
+
+  const handleTheme = useCallback(() => {
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'))
+  }, [])
+
+  const handleSound = useCallback(() => {
+    setSoundEnabled(prev => !prev)
+  }, [])
+
+  const handleUpdateName = useCallback((player, name) => {
+    setPlayers(prev => ({
+      ...prev,
+      [player]: { ...prev[player], name }
+    }))
+  }, [])
+
+  const value = {
+    board,
+    currentPlayer,
+    winner,
+    isDraw,
+    winningLine,
+    gameStarted,
+    isPaused,
+    timer,
+    theme,
+    soundEnabled,
+    players,
+    handleMakeMove,
+    handleGameReset,
+    handleGameStart,
+    handleGamePause,
+    handleTheme,
+    handleSound,
+    handleUpdateName
   }
 
   return (
-    <GameContext.Provider value={{ board, currentPlayer, winner, scores, makeMove, resetGame }}>
+    <GameContext.Provider value={value}>
       {children}
     </GameContext.Provider>
-  );
+  )
+  
 }
-
-export default GameContext;

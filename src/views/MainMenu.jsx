@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { Logo } from '../components'
+import { HowToPlayModal, Logo } from '../components'
 
 /* Layout */
 const Page = styled.div`
@@ -89,14 +89,14 @@ export default function Home () {
           <Link to='Game'>
             <PlayButton>Play</PlayButton>
           </Link>
-          <PlaybookButton onClick={howToPlayModal.open}>
+          <PlaybookButton onClick={HowToPlayModal.open}>
             Playbook
           </PlaybookButton>
         </ButtonStack>
       </Content>
       <HowToPlayModal
-        isOpen={howToPlayModal.isOpen}
-        onClose={howToPlayModal.close}
+        isOpen={HowToPlayModal.isOpen}
+        onClose={HowToPlayModal.close}
         soundEnabled={true}
       />
     </Page>
