@@ -71,12 +71,6 @@ const IconButton = styled.button`
   }
 `
 
-const ButtonGroup = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`
-
 const TurnIndicator = styled.div`
   text-align: center;
   padding: 0.5rem 0;
