@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 
-export default function useSound(soundEnable = true) {
+export default function useSound(soundEnabled = true) {
   const audioContextRef = useRef(null);
   const getAudioContext = useCallback(() => {
     if (!audioContextRef.current) {
@@ -11,7 +11,7 @@ export default function useSound(soundEnable = true) {
 
   const playTune = useCallback(
     (freq, duration, type = "sine", volume = 0.3) => {
-      if (!soundEnable) return;
+      if (!soundEnabled) return;
 
       try {
         const ctx = getAudioContext();
@@ -36,7 +36,7 @@ export default function useSound(soundEnable = true) {
         console.error("Sound not supported", error);
       }
     },
-    [soundEnable, getAudioContext]
+    [soundEnabled, getAudioContext]
   );
 
   const playClick = useCallback(() => {

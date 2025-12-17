@@ -1,10 +1,7 @@
-
-import styled from 'styled-components';
-import { Trophy, Handshake, RotateCcw, Home } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { useGame, useSound } from '../../hooks';
-
-
+import styled from 'styled-components'
+import { Trophy, Handshake, RotateCcw, Home } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { useGame, useSound } from '../../hooks'
 
 const Overlay = styled.div`
   position: fixed;
@@ -13,7 +10,7 @@ const Overlay = styled.div`
   backdrop-filter: blur(4px);
   z-index: 40;
   transition: opacity 0.2s;
-`;
+`
 
 const ModalContainer = styled.div`
   position: fixed;
@@ -23,7 +20,7 @@ const ModalContainer = styled.div`
   align-items: center;
   justify-content: center;
   padding: 1rem;
-`;
+`
 
 const ModalContent = styled.div`
   background: linear-gradient(to bottom, #18181b, #09090b);
@@ -33,7 +30,7 @@ const ModalContent = styled.div`
   max-width: 24rem;
   width: 100%;
   text-align: center;
-`;
+`
 
 const IconCircle = styled.div`
   width: 5rem;
@@ -43,41 +40,42 @@ const IconCircle = styled.div`
   display: flex;
   align-items: center;
   justify-center;
-  background: ${props => props.$winner 
-    ? 'linear-gradient(to bottom right, #a855f7, #7c3aed)'
-    : 'linear-gradient(to bottom right, #52525b, #3f3f46)'};
+  background: ${props =>
+    props.$winner
+      ? 'linear-gradient(to bottom right, #a855f7, #7c3aed)'
+      : 'linear-gradient(to bottom right, #52525b, #3f3f46)'};
 
   svg {
     width: 2.5rem;
     height: 2.5rem;
     color: white;
   }
-`;
+`
 
 const Title = styled.h2`
   font-size: 1.875rem;
   font-weight: bold;
   color: white;
   margin-bottom: 0.5rem;
-`;
+`
 
 const Subtitle = styled.p`
-  font-size: ${props => props.$large ? '1.25rem' : '1.125rem'};
-  font-weight: ${props => props.$medium ? '500' : '400'};
-  color: ${props => props.$purple ? '#c084fc' : '#a1a1aa'};
+  font-size: ${props => (props.$large ? '1.25rem' : '1.125rem')};
+  font-weight: ${props => (props.$medium ? '500' : '400')};
+  color: ${props => (props.$purple ? '#c084fc' : '#a1a1aa')};
   margin-bottom: 1.5rem;
-`;
+`
 
 const ButtonGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-`;
+`
 
 const Button = styled.button`
   width: 100%;
   padding: 0.75rem 1.5rem;
-  background-color: ${props => props.$primary ? '#9333ea' : '#27272a'};
+  background-color: ${props => (props.$primary ? '#9333ea' : '#27272a')};
   color: white;
   font-weight: 500;
   border-radius: 0.75rem;
@@ -90,36 +88,36 @@ const Button = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: ${props => props.$primary ? '#7e22ce' : '#3f3f46'};
+    background-color: ${props => (props.$primary ? '#7e22ce' : '#3f3f46')};
   }
 
   svg {
     width: 1.25rem;
     height: 1.25rem;
   }
-`;
+`
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-`;
+`
 
-
-export default function GameOverModal() {
-  const { winner, isDraw, players, resetGame, soundEnabled } = useGame();
-  const { playClick } = useSound(soundEnabled);
-
-  const isOpen = winner || isDraw;
+export default function GameOverModal () {
+  const { winner, isDraw, players, handleGameReset, soundEnabled } = useGame()
+  const { playClick } = useSound(soundEnabled)
+  const isOpen = winner || isDraw
 
   const handleReset = () => {
-    playClick();
-    resetGame();
-  };
+    handleGameReset()
+    if (soundEnabled) {
+      playClick()
+    }
+  }
 
   const handleHomeClick = () => {
-    playClick();
-  };
+    playClick()
+  }
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <>
@@ -142,9 +140,7 @@ export default function GameOverModal() {
                 <Handshake />
               </IconCircle>
               <Title>It's a Draw!</Title>
-              <Subtitle $large>
-                Well played, both of you!
-              </Subtitle>
+              <Subtitle $large>Well played, both of you!</Subtitle>
             </>
           )}
 
@@ -153,7 +149,7 @@ export default function GameOverModal() {
               <RotateCcw />
               Play Again
             </Button>
-            <StyledLink to="/" onClick={handleHomeClick}>
+            <StyledLink to='/' onClick={handleHomeClick}>
               <Button>
                 <Home />
                 Home
@@ -163,5 +159,5 @@ export default function GameOverModal() {
         </ModalContent>
       </ModalContainer>
     </>
-  );
+  )
 }

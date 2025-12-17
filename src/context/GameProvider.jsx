@@ -1,10 +1,5 @@
-import {
-  useState,
-  useCallback,
-  useEffect
-} from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import GameContext from './GameContext'
-
 
 const WINING_COMBOS = [
   [0, 1, 2],
@@ -114,12 +109,13 @@ export default function GameProvider ({ children }) {
   }, [])
 
   const handleGameStart = useCallback(() => {
-    setGameStarted(prev => !prev)
-  }, [])
+    handleGameReset()
+    setGameStarted(true)
+  }, [handleGameReset])
 
-    const handleGamePause = useCallback(() => {
-    setIsPaused(prev => !prev);
-  }, []);
+  const handleGamePause = useCallback(() => {
+    setIsPaused(prev => !prev)
+  }, [])
 
   const handleTheme = useCallback(() => {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'))
@@ -157,10 +153,5 @@ export default function GameProvider ({ children }) {
     handleUpdateName
   }
 
-  return (
-    <GameContext.Provider value={value}>
-      {children}
-    </GameContext.Provider>
-  )
-  
+  return <GameContext.Provider value={value}>{children}</GameContext.Provider>
 }

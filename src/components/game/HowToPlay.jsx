@@ -96,8 +96,10 @@ export default function HowToPlayModal ({
   const { playClick } = useSound(soundEnabled)
 
   const handleClose = () => {
-    playClick()
     onClose()
+    if (soundEnabled) {
+      playClick()
+    }
   }
 
   if (!isOpen) return null

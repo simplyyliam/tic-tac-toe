@@ -7,7 +7,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-`;
+`
 
 const TimerDisplay = styled.div`
   display: flex;
@@ -22,33 +22,34 @@ const TimerDisplay = styled.div`
     height: 1rem;
     color: #a1a1aa;
   }
-`;
+`
 
 const TimeText = styled.span`
   color: white;
   font-family: monospace;
   font-size: 0.875rem;
-`;
+`
 
 const PauseButton = styled.button`
   padding: 0.5rem;
   border-radius: 0.5rem;
   transition: all 0.2s;
   border: none;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-  background-color: ${props => props.disabled ? 'rgba(39, 39, 42, 0.5)' : 'rgba(39, 39, 42, 0.8)'};
-  color: ${props => props.disabled ? '#52525b' : 'white'};
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+  background-color: ${props =>
+    props.disabled ? 'rgba(39, 39, 42, 0.5)' : 'rgba(39, 39, 42, 0.8)'};
+  color: ${props => (props.disabled ? '#52525b' : 'white')};
 
   &:hover {
-    background-color: ${props => props.disabled ? 'rgba(39, 39, 42, 0.5)' : '#3f3f46'};
+    background-color: ${props =>
+      props.disabled ? 'rgba(39, 39, 42, 0.5)' : '#3f3f46'};
   }
 
   svg {
     width: 1.25rem;
     height: 1.25rem;
   }
-`;
-
+`
 
 export default function GameControls () {
   const { timer, isPaused, handleGamePause, winner, isDraw, soundEnabled } =
@@ -64,8 +65,10 @@ export default function GameControls () {
   }
 
   const handlePauseClick = () => {
-    playClick()
     handleGamePause()
+    if (soundEnabled) {
+      playClick()
+    }
   }
 
   const isGameOver = winner || isDraw
@@ -76,7 +79,7 @@ export default function GameControls () {
         <Clock />
         <TimeText>{formatTime(timer)}</TimeText>
       </TimerDisplay>
-      
+
       <PauseButton onClick={handlePauseClick} disabled={isGameOver}>
         {isPaused ? <Play /> : <Pause />}
       </PauseButton>

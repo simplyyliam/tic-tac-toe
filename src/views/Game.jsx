@@ -139,13 +139,17 @@ function GameContent () {
   }, [gameStarted, handleGameStart])
 
   const handleOpenSettings = () => {
-    playClick()
     settingsModal.open()
+    if (soundEnabled) {
+      playClick()
+    }
   }
 
   const handleOpenHelp = () => {
-    playClick()
     howToPlayModal.open()
+    if (soundEnabled) {
+      playClick()
+    }
   }
 
   return (

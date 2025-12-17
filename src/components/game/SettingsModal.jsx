@@ -1,8 +1,7 @@
-import { useState } from 'react';
-import styled from 'styled-components';
-import { Settings, X, Volume2, VolumeX } from 'lucide-react';
-import { useGame, useSound } from '../../hooks';
-
+import { useState } from 'react'
+import styled from 'styled-components'
+import { Settings, X, Volume2, VolumeX } from 'lucide-react'
+import { useGame, useSound } from '../../hooks'
 
 const Overlay = styled.div`
   position: fixed;
@@ -11,7 +10,7 @@ const Overlay = styled.div`
   backdrop-filter: blur(4px);
   z-index: 40;
   transition: opacity 0.2s;
-`;
+`
 
 const ModalContainer = styled.div`
   position: fixed;
@@ -21,7 +20,7 @@ const ModalContainer = styled.div`
   align-items: center;
   justify-content: center;
   padding: 1rem;
-`;
+`
 
 const ModalContent = styled.div`
   background-color: #18181b;
@@ -30,14 +29,14 @@ const ModalContent = styled.div`
   padding: 1.5rem;
   max-width: 28rem;
   width: 100%;
-`;
+`
 
 const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1.5rem;
-`;
+`
 
 const Title = styled.h2`
   font-size: 1.25rem;
@@ -51,7 +50,7 @@ const Title = styled.h2`
     width: 1.25rem;
     height: 1.25rem;
   }
-`;
+`
 
 const CloseButton = styled.button`
   padding: 0.5rem;
@@ -70,19 +69,19 @@ const CloseButton = styled.button`
     width: 1.25rem;
     height: 1.25rem;
   }
-`;
+`
 
 const Content = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-`;
+`
 
 const Section = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-`;
+`
 
 const SectionTitle = styled.h3`
   font-size: 0.875rem;
@@ -90,34 +89,35 @@ const SectionTitle = styled.h3`
   color: #a1a1aa;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-`;
+`
 
 const PlayerInputs = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-`;
+`
 
 const PlayerRow = styled.div`
   display: flex;
   align-items: center;
   gap: 0.75rem;
-`;
+`
 
 const PlayerIcon = styled.div`
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  background-color: ${props => props.$xPlayer ? 'rgba(147, 51, 234, 0.2)' : 'rgba(196, 181, 253, 0.2)'};
+  background-color: ${props =>
+    props.$xPlayer ? 'rgba(147, 51, 234, 0.2)' : 'rgba(196, 181, 253, 0.2)'};
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   span {
-    color: ${props => props.$xPlayer ? '#a855f7' : '#d8b4fe'};
+    color: ${props => (props.$xPlayer ? '#a855f7' : '#d8b4fe')};
     font-weight: bold;
   }
-`;
+`
 
 const Input = styled.input`
   flex: 1;
@@ -136,7 +136,7 @@ const Input = styled.input`
     border-color: #a855f7;
     box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.2);
   }
-`;
+`
 
 const ToggleRow = styled.div`
   display: flex;
@@ -144,7 +144,7 @@ const ToggleRow = styled.div`
   justify-content: space-between;
   padding: 0.75rem 0;
   border-top: 1px solid #27272a;
-`;
+`
 
 const ToggleLabel = styled.div`
   display: flex;
@@ -159,18 +159,18 @@ const ToggleLabel = styled.div`
   span {
     color: white;
   }
-`;
+`
 
 const ToggleButton = styled.button`
   width: 3rem;
   height: 1.5rem;
   border-radius: 9999px;
   transition: background-color 0.2s;
-  background-color: ${props => props.$enabled ? '#9333ea' : '#3f3f46'};
+  background-color: ${props => (props.$enabled ? '#9333ea' : '#3f3f46')};
   border: none;
   cursor: pointer;
   position: relative;
-`;
+`
 
 const ToggleCircle = styled.div`
   width: 1.25rem;
@@ -181,8 +181,8 @@ const ToggleCircle = styled.div`
   position: absolute;
   top: 0.125rem;
   transition: transform 0.2s;
-  transform: translateX(${props => props.$enabled ? '1.625rem' : '0.125rem'});
-`;
+  transform: translateX(${props => (props.$enabled ? '1.625rem' : '0.125rem')});
+`
 
 const SaveButton = styled.button`
   width: 100%;
@@ -199,48 +199,46 @@ const SaveButton = styled.button`
   &:hover {
     background-color: #7e22ce;
   }
-`;
+`
 
+export default function SettingsModal ({ isOpen, onClose }) {
+  const { soundEnabled, toggleSound, players, handleUpdateName, handleGameReset } =
+    useGame()
 
-export default function SettingsModal({ isOpen, onClose }) {
-  const {
-    soundEnabled,
-    toggleSound,
-    players,
-    updatePlayerName,
-    resetGame,
-  } = useGame();
+  const { playClick } = useSound(soundEnabled)
 
-  const { playClick } = useSound(soundEnabled);
-
-  const [player1Name, setPlayer1Name] = useState(players.X.name);
-  const [player2Name, setPlayer2Name] = useState(players.O.name);
+  const [player1Name, setPlayer1Name] = useState(players.X.name)
+  const [player2Name, setPlayer2Name] = useState(players.O.name)
 
   const handleSave = () => {
-    playClick();
-    updatePlayerName('X', player1Name || 'Player 1');
-    updatePlayerName('O', player2Name || 'Player 2');
-    resetGame();
-    onClose();
-  };
+    handleUpdateName('X', player1Name || 'Player 1')
+    handleUpdateName('O', player2Name || 'Player 2')
+    handleGameReset()
+    onClose()
+    if (soundEnabled) {
+      playClick()
+    }
+  }
 
   const handleClose = () => {
-    playClick();
-    onClose();
-  };
+    onClose()
+    if (soundEnabled) {
+      playClick()
+    }
+  }
 
   const handleToggleSound = () => {
-    toggleSound();
-    if (!soundEnabled) playClick();
-  };
+    toggleSound()
+    if (!soundEnabled) playClick()
+  }
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <>
-       <Overlay onClick={handleClose} />
+      <Overlay onClick={handleClose} />
       <ModalContainer>
-        <ModalContent onClick={(e) => e.stopPropagation()}>
+        <ModalContent onClick={e => e.stopPropagation()}>
           <Header>
             <Title>
               <Settings />
@@ -260,10 +258,10 @@ export default function SettingsModal({ isOpen, onClose }) {
                     <span>X</span>
                   </PlayerIcon>
                   <Input
-                    type="text"
+                    type='text'
                     value={player1Name}
-                    onChange={(e) => setPlayer1Name(e.target.value)}
-                    placeholder="Player 1"
+                    onChange={e => setPlayer1Name(e.target.value)}
+                    placeholder='Player 1'
                   />
                 </PlayerRow>
                 <PlayerRow>
@@ -271,10 +269,10 @@ export default function SettingsModal({ isOpen, onClose }) {
                     <span>O</span>
                   </PlayerIcon>
                   <Input
-                    type="text"
+                    type='text'
                     value={player2Name}
-                    onChange={(e) => setPlayer2Name(e.target.value)}
-                    placeholder="Player 2"
+                    onChange={e => setPlayer2Name(e.target.value)}
+                    placeholder='Player 2'
                   />
                 </PlayerRow>
               </PlayerInputs>
@@ -282,7 +280,11 @@ export default function SettingsModal({ isOpen, onClose }) {
 
             <ToggleRow>
               <ToggleLabel>
-                {soundEnabled ? <Volume2 color="#a855f7" /> : <VolumeX color="#71717a" />}
+                {soundEnabled ? (
+                  <Volume2 color='#a855f7' />
+                ) : (
+                  <VolumeX color='#71717a' />
+                )}
                 <span>Sound Effects</span>
               </ToggleLabel>
               <ToggleButton $enabled={soundEnabled} onClick={handleToggleSound}>
@@ -291,11 +293,9 @@ export default function SettingsModal({ isOpen, onClose }) {
             </ToggleRow>
           </Content>
 
-          <SaveButton onClick={handleSave}>
-            Save & Restart Game
-          </SaveButton>
+          <SaveButton onClick={handleSave}>Save & Restart Game</SaveButton>
         </ModalContent>
       </ModalContainer>
     </>
-  );
+  )
 }
