@@ -7,13 +7,13 @@ import { useGame, useSound } from '../../hooks';
 const Overlay = styled.div`
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   z-index: 40;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s;
 `;
 
-const Wrapper = styled.div`
+const ModalContainer = styled.div`
   position: fixed;
   inset: 0;
   z-index: 50;
@@ -23,13 +23,13 @@ const Wrapper = styled.div`
   padding: 1rem;
 `;
 
-const Card = styled.div`
-  background: #18181b;
+const ModalContent = styled.div`
+  background-color: #18181b;
   border: 1px solid #27272a;
   border-radius: 1rem;
   padding: 1.5rem;
-  width: 100%;
   max-width: 28rem;
+  width: 100%;
 `;
 
 const Header = styled.div`
@@ -40,36 +40,62 @@ const Header = styled.div`
 `;
 
 const Title = styled.h2`
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: white;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: white;
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
 `;
 
 const CloseButton = styled.button`
   padding: 0.5rem;
   border-radius: 0.5rem;
-  transition: background-color 0.2s ease;
+  background: transparent;
+  color: #a1a1aa;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
 
   &:hover {
-    background: #27272a;
+    background-color: #27272a;
+  }
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
   }
 `;
 
-const Section = styled.div`
+const Content = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 `;
 
+const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
 const SectionTitle = styled.h3`
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 500;
   color: #a1a1aa;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+`;
+
+const PlayerInputs = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 `;
 
 const PlayerRow = styled.div`
@@ -78,23 +104,24 @@ const PlayerRow = styled.div`
   gap: 0.75rem;
 `;
 
-const PlayerBadge = styled.div`
+const PlayerIcon = styled.div`
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: 9999px;
+  border-radius: 50%;
+  background-color: ${props => props.$xPlayer ? 'rgba(147, 51, 234, 0.2)' : 'rgba(196, 181, 253, 0.2)'};
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${({ variant }) =>
-    variant === 'X' ? 'rgba(147,51,234,0.2)' : 'rgba(192,132,252,0.2)'};
-  color: ${({ variant }) =>
-    variant === 'X' ? '#c084fc' : '#d8b4fe'};
-  font-weight: 700;
+  
+  span {
+    color: ${props => props.$xPlayer ? '#a855f7' : '#d8b4fe'};
+    font-weight: bold;
+  }
 `;
 
 const Input = styled.input`
   flex: 1;
-  background: #27272a;
+  background-color: #27272a;
   border: 1px solid #3f3f46;
   border-radius: 0.5rem;
   padding: 0.5rem 0.75rem;
@@ -106,7 +133,8 @@ const Input = styled.input`
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px #a855f7;
+    border-color: #a855f7;
+    box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.2);
   }
 `;
 
@@ -118,49 +146,61 @@ const ToggleRow = styled.div`
   border-top: 1px solid #27272a;
 `;
 
-const ToggleInfo = styled.div`
+const ToggleLabel = styled.div`
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: white;
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  span {
+    color: white;
+  }
 `;
 
 const ToggleButton = styled.button`
   width: 3rem;
   height: 1.5rem;
   border-radius: 9999px;
-  background: ${({ enabled }) => (enabled ? '#9333ea' : '#3f3f46')};
+  transition: background-color 0.2s;
+  background-color: ${props => props.$enabled ? '#9333ea' : '#3f3f46'};
+  border: none;
+  cursor: pointer;
   position: relative;
-  transition: background-color 0.2s ease;
 `;
 
-const ToggleKnob = styled.div`
+const ToggleCircle = styled.div`
   width: 1.25rem;
   height: 1.25rem;
-  background: white;
-  border-radius: 9999px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   position: absolute;
   top: 0.125rem;
-  left: 0.125rem;
-  transform: ${({ enabled }) =>
-    enabled ? 'translateX(1.625rem)' : 'translateX(0)'};
-  transition: transform 0.2s ease;
+  transition: transform 0.2s;
+  transform: translateX(${props => props.$enabled ? '1.625rem' : '0.125rem'});
 `;
 
 const SaveButton = styled.button`
   width: 100%;
   margin-top: 1.5rem;
   padding: 0.75rem;
-  border-radius: 0.75rem;
-  background: #9333ea;
+  background-color: #9333ea;
   color: white;
   font-weight: 500;
-  transition: background-color 0.2s ease;
+  border-radius: 0.75rem;
+  transition: background-color 0.2s;
+  border: none;
+  cursor: pointer;
 
   &:hover {
-    background: #7e22ce;
+    background-color: #7e22ce;
   }
 `;
+
 
 export default function SettingsModal({ isOpen, onClose }) {
   const {
@@ -198,63 +238,64 @@ export default function SettingsModal({ isOpen, onClose }) {
 
   return (
     <>
-      <Overlay onClick={handleClose} />
-      <Wrapper>
-        <Card onClick={(e) => e.stopPropagation()}>
+       <Overlay onClick={handleClose} />
+      <ModalContainer>
+        <ModalContent onClick={(e) => e.stopPropagation()}>
           <Header>
             <Title>
-              <Settings size={20} />
+              <Settings />
               Settings
             </Title>
             <CloseButton onClick={handleClose}>
-              <X size={20} color="#a1a1aa" />
+              <X />
             </CloseButton>
           </Header>
 
-          <Section>
-            <div>
+          <Content>
+            <Section>
               <SectionTitle>Players</SectionTitle>
-              <Section>
+              <PlayerInputs>
                 <PlayerRow>
-                  <PlayerBadge variant="X">X</PlayerBadge>
+                  <PlayerIcon $xPlayer>
+                    <span>X</span>
+                  </PlayerIcon>
                   <Input
+                    type="text"
                     value={player1Name}
                     onChange={(e) => setPlayer1Name(e.target.value)}
                     placeholder="Player 1"
                   />
                 </PlayerRow>
                 <PlayerRow>
-                  <PlayerBadge variant="O">O</PlayerBadge>
+                  <PlayerIcon>
+                    <span>O</span>
+                  </PlayerIcon>
                   <Input
+                    type="text"
                     value={player2Name}
                     onChange={(e) => setPlayer2Name(e.target.value)}
                     placeholder="Player 2"
                   />
                 </PlayerRow>
-              </Section>
-            </div>
+              </PlayerInputs>
+            </Section>
 
             <ToggleRow>
-              <ToggleInfo>
-                {soundEnabled ? (
-                  <Volume2 size={20} color="#c084fc" />
-                ) : (
-                  <VolumeX size={20} color="#71717a" />
-                )}
+              <ToggleLabel>
+                {soundEnabled ? <Volume2 color="#a855f7" /> : <VolumeX color="#71717a" />}
                 <span>Sound Effects</span>
-              </ToggleInfo>
-
-              <ToggleButton enabled={soundEnabled} onClick={handleToggleSound}>
-                <ToggleKnob enabled={soundEnabled} />
+              </ToggleLabel>
+              <ToggleButton $enabled={soundEnabled} onClick={handleToggleSound}>
+                <ToggleCircle $enabled={soundEnabled} />
               </ToggleButton>
             </ToggleRow>
-          </Section>
+          </Content>
 
           <SaveButton onClick={handleSave}>
             Save & Restart Game
           </SaveButton>
-        </Card>
-      </Wrapper>
+        </ModalContent>
+      </ModalContainer>
     </>
   );
 }

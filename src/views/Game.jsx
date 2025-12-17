@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Home, Settings, HelpCircle } from 'lucide-react'
 import styled from 'styled-components'
 
 import {
   PlayerCard,
-  GameControlls,
+  GameControls,
   HowToPlayModal,
   SettingsModal,
-  GameOverModal
+  GameOverModal,
+  GameBoard
 } from '../components'
 import { useGame, useModal, useSound } from '../hooks'
 import { GameProvider } from '../context'
@@ -16,26 +17,29 @@ import { GameProvider } from '../context'
 // Styled Components
 const Container = styled.div`
   min-height: 100vh;
-  background-color: #111; /* equivalent to bg-zinc-950 */
+  background-color: #09090b;
   display: flex;
   flex-direction: column;
 `
 
 const TopBar = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 1rem;
 `
 
 const IconButton = styled.button`
   padding: 0.5rem;
   border-radius: 0.5rem;
-  background-color: rgba(38, 38, 38, 0.8); /* bg-zinc-800/80 */
-  transition: all 0.2s ease;
+  background-color: rgba(39, 39, 42, 0.8);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
 
   &:hover {
-    background-color: #2c2c2c; /* bg-zinc-700 */
+    background-color: #3f3f46;
     transform: scale(1.05);
   }
 
@@ -44,29 +48,34 @@ const IconButton = styled.button`
   }
 
   svg {
-    width: 1.25rem; /* w-5 */
-    height: 1.25rem; /* h-5 */
-    color: white;
+    width: 1.25rem;
+    height: 1.25rem;
   }
+`
+
+const ButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 `
 
 const TurnIndicator = styled.div`
   text-align: center;
   padding: 0.5rem 0;
-  color: #a1a1aa; /* text-zinc-400 */
-  font-size: 0.875rem; /* text-sm */
-
-  span.current-player {
-    color: #a855f7; /* text-purple-400 */
-    font-weight: 600; /* font-semibold */
-  }
-
-  span.paused {
-    color: #facc15; /* text-yellow-400 */
-  }
+  color: #a1a1aa;
+  font-size: 0.875rem;
 `
 
-const MainArea = styled.div`
+const PausedText = styled.span`
+  color: #facc15;
+`
+
+const CurrentPlayer = styled.span`
+  color: #a855f7;
+  font-weight: 600;
+`
+
+const MainGameArea = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
@@ -74,28 +83,16 @@ const MainArea = styled.div`
   padding: 0 1rem;
 `
 
-const GameWrapper = styled.div`
+const GameContainer = styled.div`
   width: 100%;
-  max-width: 64rem; /* max-w-4xl */
+  max-width: 64rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
 `
 
-const MobilePlayerCards = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 20rem; /* max-w-[320px] */
-  margin-bottom: 1rem;
-
-  @media (min-width: 768px) {
-    display: none;
-  }
-`
-
-const DesktopPlayerCardWrapper = styled.div`
+const PlayerCardWrapper = styled.div`
   display: none;
 
   @media (min-width: 768px) {
@@ -103,19 +100,43 @@ const DesktopPlayerCardWrapper = styled.div`
   }
 `
 
+const BoardColumn = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const MobilePlayerCards = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 1rem;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+`
+
 // Component
 function GameContent () {
-  const { startGame, gameStarted, currentPlayer, isPaused, soundEnabled } =
-    useGame()
+  const {
+    handleGameStart,
+    gameStarted,
+    currentPlayer,
+    isPaused,
+    soundEnabled
+  } = useGame()
   const howToPlayModal = useModal()
   const settingsModal = useModal()
   const { playClick } = useSound(soundEnabled)
 
   useEffect(() => {
     if (!gameStarted) {
-      startGame()
+      handleGameStart()
     }
-  }, [gameStarted, startGame])
+  }, [gameStarted, handleGameStart])
 
   const handleOpenSettings = () => {
     playClick()
@@ -129,7 +150,6 @@ function GameContent () {
 
   return (
     <Container>
-      {/* Top Bar */}
       <TopBar>
         <Link to='/'>
           <IconButton onClick={playClick}>
@@ -137,60 +157,49 @@ function GameContent () {
           </IconButton>
         </Link>
 
-        <GameControlls />
+        <GameControls />
 
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+        <ButtonGroup>
           <IconButton onClick={handleOpenHelp}>
             <HelpCircle />
           </IconButton>
           <IconButton onClick={handleOpenSettings}>
             <Settings />
           </IconButton>
-        </div>
+        </ButtonGroup>
       </TopBar>
 
-      {/* Turn Indicator */}
       <TurnIndicator>
         {isPaused ? (
-          <span className='paused'>Game Paused</span>
+          <PausedText>Game Paused</PausedText>
         ) : (
           <>
-            Current Turn:{' '}
-            <span className='current-player'>{currentPlayer}</span>
+            Current Turn: <CurrentPlayer>{currentPlayer}</CurrentPlayer>
           </>
         )}
       </TurnIndicator>
 
-      {/* Main Game Area */}
-      <MainArea>
-        <GameWrapper>
-          <DesktopPlayerCardWrapper>
+      <MainGameArea>
+        <GameContainer>
+          <PlayerCardWrapper>
             <PlayerCard player='X' position='left' />
-          </DesktopPlayerCardWrapper>
+          </PlayerCardWrapper>
 
-          <div
-            style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center'
-            }}
-          >
+          <BoardColumn>
             <MobilePlayerCards>
               <PlayerCard player='X' position='left' />
               <PlayerCard player='O' position='right' />
             </MobilePlayerCards>
 
             <GameBoard />
-          </div>
+          </BoardColumn>
 
-          <DesktopPlayerCardWrapper>
+          <PlayerCardWrapper>
             <PlayerCard player='O' position='right' />
-          </DesktopPlayerCardWrapper>
-        </GameWrapper>
-      </MainArea>
+          </PlayerCardWrapper>
+        </GameContainer>
+      </MainGameArea>
 
-      {/* Modals */}
       <GameOverModal />
       <HowToPlayModal
         isOpen={howToPlayModal.isOpen}

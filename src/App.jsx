@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MainMenu, GamePage } from "./views";
-import { GameProvider } from "./context/GameContext";
+import { GameProvider } from "./context";
+
 
 function App() {
   return (

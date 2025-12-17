@@ -1,14 +1,17 @@
+import styled from "styled-components";
 
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+`;
 
 export default function Logo() {
   return (
-    <div className="flex items-center justify-center gap-2 mb-4">
-      {/* O */}
-      <svg
-        width="40"
-        height="40"
-        viewBox="0 0 100 100"
-      >
+    <Container>
+      <svg width="40" height="40" viewBox="0 0 100 100">
         <circle
           cx="50"
           cy="50"
@@ -19,12 +22,7 @@ export default function Logo() {
         />
       </svg>
 
-      {/* X */}
-      <svg
-        width="40"
-        height="40"
-        viewBox="0 0 100 100"
-      >
+      <svg width="40" height="40" viewBox="0 0 100 100">
         <path
           d="M25 25 L75 75"
           stroke="#8B5CF6"
@@ -41,12 +39,7 @@ export default function Logo() {
         />
       </svg>
 
-      {/* O */}
-      <svg
-        width="40"
-        height="40"
-        viewBox="0 0 100 100"
-      >
+      <svg width="40" height="40" viewBox="0 0 100 100">
         <circle
           cx="50"
           cy="50"
@@ -56,6 +49,6 @@ export default function Logo() {
           fill="none"
         />
       </svg>
-    </div>
+    </Container>
   );
 }

@@ -9,13 +9,13 @@ import { useGame, useSound } from '../../hooks';
 const Overlay = styled.div`
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(4px);
   z-index: 40;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s;
 `;
 
-const Wrapper = styled.div`
+const ModalContainer = styled.div`
   position: fixed;
   inset: 0;
   z-index: 50;
@@ -25,108 +25,84 @@ const Wrapper = styled.div`
   padding: 1rem;
 `;
 
-
-
-const Card = styled.div`
-  width: 100%;
-  max-width: 24rem;
-  padding: 2rem;
-  text-align: center;
-  border-radius: 1.5rem;
+const ModalContent = styled.div`
   background: linear-gradient(to bottom, #18181b, #09090b);
   border: 1px solid #27272a;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  max-width: 24rem;
+  width: 100%;
+  text-align: center;
 `;
 
-
-
-const IconBadge = styled.div`
+const IconCircle = styled.div`
   width: 5rem;
   height: 5rem;
   margin: 0 auto 1rem;
-  border-radius: 9999px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-center;
+  background: ${props => props.$winner 
+    ? 'linear-gradient(to bottom right, #a855f7, #7c3aed)'
+    : 'linear-gradient(to bottom right, #52525b, #3f3f46)'};
+
+  svg {
+    width: 2.5rem;
+    height: 2.5rem;
+    color: white;
+  }
 `;
-
-const WinnerBadge = styled(IconBadge)`
-  background: linear-gradient(to bottom right, #a855f7, #7e22ce);
-`;
-
-const DrawBadge = styled(IconBadge)`
-  background: linear-gradient(to bottom right, #52525b, #3f3f46);
-`;
-
-
 
 const Title = styled.h2`
   font-size: 1.875rem;
-  font-weight: 700;
+  font-weight: bold;
   color: white;
   margin-bottom: 0.5rem;
 `;
 
-const WinnerName = styled.p`
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: #c084fc;
+const Subtitle = styled.p`
+  font-size: ${props => props.$large ? '1.25rem' : '1.125rem'};
+  font-weight: ${props => props.$medium ? '500' : '400'};
+  color: ${props => props.$purple ? '#c084fc' : '#a1a1aa'};
   margin-bottom: 1.5rem;
 `;
 
-const DrawText = styled.p`
-  font-size: 1.125rem;
-  color: #a1a1aa;
-  margin-bottom: 1.5rem;
-`;
-
-
-
-const Actions = styled.div`
+const ButtonGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 `;
 
-const ActionButton = styled.button`
+const Button = styled.button`
   width: 100%;
   padding: 0.75rem 1.5rem;
-  border-radius: 0.75rem;
-  font-weight: 500;
+  background-color: ${props => props.$primary ? '#9333ea' : '#27272a'};
   color: white;
+  font-weight: 500;
+  border-radius: 0.75rem;
+  transition: background-color 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  transition: background-color 0.2s ease;
+  border: none;
   cursor: pointer;
-`;
-
-const PlayAgainButton = styled(ActionButton)`
-  background: #9333ea;
 
   &:hover {
-    background: #7e22ce;
+    background-color: ${props => props.$primary ? '#7e22ce' : '#3f3f46'};
+  }
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
   }
 `;
 
-const HomeButton = styled(Link)`
-  width: 100%;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.75rem;
-  font-weight: 500;
-  color: white;
+const StyledLink = styled(Link)`
   text-decoration: none;
-  background: #27272a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background: #3f3f46;
-  }
 `;
+
 
 export default function GameOverModal() {
   const { winner, isDraw, players, resetGame, soundEnabled } = useGame();
@@ -148,45 +124,44 @@ export default function GameOverModal() {
   return (
     <>
       <Overlay />
-
-      <Wrapper>
-        <Card>
+      <ModalContainer>
+        <ModalContent>
           {winner ? (
             <>
-              <WinnerBadge>
-                <Trophy size={40} color="white" />
-              </WinnerBadge>
-
+              <IconCircle $winner>
+                <Trophy />
+              </IconCircle>
               <Title>Winner!</Title>
-              <WinnerName>{players[winner].name}</WinnerName>
+              <Subtitle $purple $large $medium>
+                {players[winner].name}
+              </Subtitle>
             </>
           ) : (
             <>
-              <DrawBadge>
-                <Handshake size={40} color="white" />
-              </DrawBadge>
-
-              <Title>It&apos;s a Draw!</Title>
-              <DrawText>Well played, both of you!</DrawText>
+              <IconCircle>
+                <Handshake />
+              </IconCircle>
+              <Title>It's a Draw!</Title>
+              <Subtitle $large>
+                Well played, both of you!
+              </Subtitle>
             </>
           )}
 
-          <Actions>
-            <PlayAgainButton onClick={handleReset}>
-              <RotateCcw size={20} />
+          <ButtonGroup>
+            <Button $primary onClick={handleReset}>
+              <RotateCcw />
               Play Again
-            </PlayAgainButton>
-
-            <HomeButton
-              to="/"
-              onClick={handleHomeClick}
-            >
-              <Home size={20} />
-              Home
-            </HomeButton>
-          </Actions>
-        </Card>
-      </Wrapper>
+            </Button>
+            <StyledLink to="/" onClick={handleHomeClick}>
+              <Button>
+                <Home />
+                Home
+              </Button>
+            </StyledLink>
+          </ButtonGroup>
+        </ModalContent>
+      </ModalContainer>
     </>
   );
 }
