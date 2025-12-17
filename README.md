@@ -1,16 +1,58 @@
-# React + Vite
+# Tic Tac Toe
+<img width="2880" height="1800" alt="image" src="https://github.com/user-attachments/assets/2e946687-1f75-4db0-9b68-88bcbfc091e5" />
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple Tic Tac Toe game built with React.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+* 2-player game (X vs O)
+* Score tracking (wins/losses)
+* Game pause and resume
+* Animated background for fun visual effects
+* Responsive design for desktop and mobile
 
-## React Compiler
+## Components
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* **Game Board**: The main Tic Tac Toe grid.
+* **Player Card**: Displays player info, avatar, and stats.
+* **Game Controls**: Pause, play, and timer functionality.
+* **Modals**: How to play guide, settings, and game over screen.
+* **Animated Background**: Floating shapes for a dynamic UI.
 
-## Expanding the ESLint configuration
+## Technologies Used
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* React
+* Styled-components
+* SVG for custom shapes
+* React Router
+
+## Setup Instructions
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/simplyyliam/tic-tac-toe.git
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Start the development server:
+
+```bash
+npm start
+```
+
+## Usage
+
+* Click "Play" to start a game.
+* Use the pause button to pause/resume the game.
+* Click "Playbook" to view instructions.
+* Scores are tracked automatically.
+
+## License
+
+This project is licensed under the MIT License.
