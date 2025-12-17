@@ -67,5 +67,5 @@ export default function useSound(soundEnabled = true) {
     playTune(200, 0.2, "square", 0.15);
   }, [playTune]);
 
-  return playClick, playMove, playWin, playDraw, playerError;
+  return { playClick, playMove, playWin, playDraw, playerError };
 }
