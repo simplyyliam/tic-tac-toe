@@ -1,5 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import GameContext from './GameContext'
+import { faker } from '@faker-js/faker'
+
 
 const WINING_COMBOS = [
   [0, 1, 2],
@@ -26,16 +28,16 @@ export default function GameProvider ({ children }) {
 
   const [players, setPlayers] = useState({
     X: {
-      name: 'Player 1',
+      name: faker.person.firstName(),
       avatar:
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2w=100&h=100&fit=crop',
+        faker.image.avatar(),
       wins: 0,
       losses: 0
     },
     O: {
-      name: 'Player 2',
+      name: faker.person.firstName(),
       avatar:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+        faker.image.avatar(),
       wins: 0,
       losses: 0
     }
