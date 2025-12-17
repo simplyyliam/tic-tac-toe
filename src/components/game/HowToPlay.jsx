@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { ArrowLeft } from 'lucide-react'
+import { useSound } from '../../hooks'
 
 const Overlay = styled.div`
   position: fixed;
@@ -87,7 +88,18 @@ const LightPurpleText = styled.span`
   font-weight: 600;
 `
 
-export default function HowToPlayModal ({ isOpen, onClose }) {
+export default function HowToPlayModal ({
+  isOpen,
+  onClose,
+  soundEnabled = true
+}) {
+  const { playClick } = useSound(soundEnabled)
+
+  const handleClose = () => {
+    playClick()
+    onClose()
+  }
+
   if (!isOpen) return null
 
   return (
