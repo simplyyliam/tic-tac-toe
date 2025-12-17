@@ -23,10 +23,27 @@ const Container = styled.div`
 `
 
 const TopBar = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 1rem;
+`
+
+const LeftSlot = styled.div`
+  flex: 0 0 auto;
+`
+
+const CenterSlot = styled.div`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+`
+
+const RightSlot = styled.div`
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 `
 
 const IconButton = styled.button`
@@ -155,24 +172,27 @@ function GameContent () {
   return (
     <Container>
       <TopBar>
-        <Link to='/'>
-          <IconButton onClick={playClick}>
-            <Home />
-          </IconButton>
-        </Link>
+        <LeftSlot>
+          <Link to='/'>
+            <IconButton onClick={playClick}>
+              <Home />
+            </IconButton>
+          </Link>
+        </LeftSlot>
 
-        <GameControls />
+        <CenterSlot>
+          <GameControls />
+        </CenterSlot>
 
-        <ButtonGroup>
+        <RightSlot>
           <IconButton onClick={handleOpenHelp}>
             <HelpCircle />
           </IconButton>
           <IconButton onClick={handleOpenSettings}>
             <Settings />
           </IconButton>
-        </ButtonGroup>
+        </RightSlot>
       </TopBar>
-
       <TurnIndicator>
         {isPaused ? (
           <PausedText>Game Paused</PausedText>
