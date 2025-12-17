@@ -202,7 +202,7 @@ const SaveButton = styled.button`
 `
 
 export default function SettingsModal ({ isOpen, onClose }) {
-  const { soundEnabled, toggleSound, players, handleUpdateName, handleGameReset } =
+  const { soundEnabled, handleSound, players, handleUpdateName, handleGameReset } =
     useGame()
 
   const { playClick } = useSound(soundEnabled)
@@ -228,7 +228,7 @@ export default function SettingsModal ({ isOpen, onClose }) {
   }
 
   const handleToggleSound = () => {
-    toggleSound()
+    handleSound()
     if (!soundEnabled) playClick()
   }
 
