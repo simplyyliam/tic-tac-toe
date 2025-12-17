@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { HowToPlayModal, Logo } from '../components'
+import { AnimatedBackground, HowToPlayModal, Logo } from '../components'
 import { useModal } from '../hooks'
 
 const Container = styled.div`
@@ -92,6 +92,7 @@ export default function Home () {
   const howToPlayModal = useModal()
   return (
     <Container>
+      <AnimatedBackground/>
       <Content>
         <Logo />
 

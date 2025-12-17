@@ -9,7 +9,8 @@ import {
   HowToPlayModal,
   SettingsModal,
   GameOverModal,
-  GameBoard
+  GameBoard,
+  AnimatedBackground
 } from '../components'
 import { useGame, useModal, useSound } from '../hooks'
 import { GameProvider } from '../context'
@@ -171,6 +172,7 @@ function GameContent () {
 
   return (
     <Container>
+      <AnimatedBackground/>
       <TopBar>
         <LeftSlot>
           <Link to='/'>
